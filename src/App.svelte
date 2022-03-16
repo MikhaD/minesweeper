@@ -1,22 +1,11 @@
-<script>
-	import Tile from "./Tile.svelte";
+<script lang="ts">
+	import Board from "./Board.svelte";
+	import { settings } from "./settings";
 
-	let width = 20;
-	let height = 30;
-	let bombs = 50;
+	settings.bombs = 10;
+
+	settings.width = 10;
+	settings.height = 10;
 </script>
 
-<div class="board" style="grid-template: repeat({height}, 1fr) / repeat({width}, 1fr)">
-	{#each Array(height) as _, i}
-		{#each Array(width) as _, j}
-			<Tile />
-		{/each}
-	{/each}
-</div>
-
-<style>
-	.board {
-		width: fit-content;
-		display: grid;
-	}
-</style>
+<Board />

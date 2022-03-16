@@ -8,4 +8,6 @@
 	font-size: 62.5%;
 
 	--board-color: #BFBFBF;
+	--red: #ff0000;
+	user-select: none;
 }
