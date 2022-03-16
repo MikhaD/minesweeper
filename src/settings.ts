@@ -5,5 +5,5 @@ export const settings: Settings = {
 	height: 10,
 	question: false,
 	bombs: 10,
-	primary_action: ACTION.OPEN
+	primary_action: ACTION.FLAG
 };

@@ -4,6 +4,7 @@ export enum STATE {
 	"question",
 	"flat",
 	"open",
+	"wrong_flag",
 }
 export enum NUM {
 	"zero",
@@ -18,11 +19,12 @@ export enum NUM {
 }
 
 export const enum ACTION {
-	"OPEN",
-	"FLAG",
+	"OPEN" = 0,
+	"FLAG" = 2,
 }
 export const enum GAMESTATE {
-	"WIN",
-	"LOSS",
+	"WON",
+	"LOST",
 	"ACTIVE",
+	"UNSTARTED",
 }

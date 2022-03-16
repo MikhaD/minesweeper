@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { GAMESTATE } from "./enums";
+	import { GAMESTATE, STATE } from "./enums";
 
 	import { settings } from "./settings";
-	import { gameState } from "./stores";
+	import { flagged, gameState } from "./stores";
 	import Tile from "./Tile.svelte";
 	import { randint } from "./utils";
 
-	const tiles: Tile[][] = new Array(settings.height).fill(null).map(() => []);
+	export const tiles: Tile[][] = new Array(settings.height).fill(null).map(() => []);
 	let remaining = settings.width * settings.height;
-	let started = false;
 
 	function generateBombs(row: number, col: number, dontBomb: Tile[]) {
 		const possibleBombs = new Array(settings.width * settings.height)
@@ -30,13 +29,21 @@
 	}
 
 	function clicked(e: CustomEvent) {
-		if (!started) {
-			started = true;
+		if ($gameState === GAMESTATE.UNSTARTED) {
+			$gameState = GAMESTATE.ACTIVE;
 			generateBombs(e.detail.row, e.detail.col, e.detail.neighbors);
 		}
 		remaining -= 1;
 		if (remaining === settings.bombs) {
-			$gameState = GAMESTATE.WIN;
+			$gameState = GAMESTATE.WON;
+			for (const row of tiles) {
+				row.forEach((tile) => {
+					if (tile.bomb && tile.state !== STATE.flag) {
+						tile.state = STATE.flag;
+					}
+				});
+			}
+			flagged.set(settings.bombs);
 		}
 	}
 
@@ -57,36 +64,24 @@
 	});
 </script>
 
-<main>
-	<div
-		class="board"
-		style="grid-template: repeat({settings.height}, 1fr) / repeat({settings.width}, 1fr)"
-	>
-		{#each Array(settings.height) as _, i}
-			{#each Array(settings.width) as _, j}
-				<Tile bind:this={tiles[i][j]} row={i} col={j} on:clicked={clicked} />
-			{/each}
+<div
+	class="board"
+	class:disabled={$gameState === GAMESTATE.WON || $gameState === GAMESTATE.LOST}
+	style="grid-template: repeat({settings.height}, 1fr) / repeat({settings.width}, 1fr)"
+>
+	{#each Array(settings.height) as _, i}
+		{#each Array(settings.width) as _, j}
+			<Tile bind:this={tiles[i][j]} row={i} col={j} on:clicked={clicked} on:flatten />
 		{/each}
-	</div>
-	<div>
-		<h1>
-			{#if $gameState === GAMESTATE.WIN}
-				You Win
-			{:else if $gameState === GAMESTATE.LOSS}
-				You Lose
-			{:else}
-				{remaining}
-			{/if}
-		</h1>
-	</div>
-</main>
+	{/each}
+</div>
 
 <style>
-	main {
-		margin: 1rem 2rem;
-	}
 	.board {
 		width: fit-content;
 		display: grid;
+	}
+	.disabled {
+		pointer-events: none;
 	}
 </style>
