@@ -61,7 +61,6 @@
 		}
 	}
 	function flattenNeighbors(e: MouseEvent) {
-		console.log(e.button, settings.primary_action);
 		if (e.button === 0 && state === STATE.open && adjacent_bombs) {
 			dispatch("flatten", { row, col });
 			neighbors.forEach((e) => e.flatten());
@@ -100,9 +99,15 @@
 	}
 
 	const unsub = gameState.subscribe((gs) => {
-		if (gs === GAMESTATE.LOST) {
-			if (state === STATE.closed && bomb) state = STATE.open;
-			else if (state === STATE.flag && !bomb) state = STATE.wrong_flag;
+		switch (gs) {
+			case GAMESTATE.LOST:
+				if (state === STATE.closed && bomb) state = STATE.open;
+				else if (state === STATE.flag && !bomb) state = STATE.wrong_flag;
+				break;
+
+			case GAMESTATE.WON:
+				if (bomb && state !== STATE.flag) state = STATE.flag;
+				break;
 		}
 	});
 	onDestroy(unsub);
@@ -138,16 +143,13 @@
 	.tile {
 		background: var(--board-color);
 		display: inline-block;
-		width: 2.2rem;
+		width: 1em;
 		aspect-ratio: 1;
 		overflow: hidden;
-		border: 0.2rem solid;
-		border-top-color: white;
-		border-left-color: white;
-		border-right-color: #7e7e7e;
-		border-bottom-color: #7e7e7e;
+		border: 0.1em solid;
+		border-color: var(--border-color);
 		font-weight: bold;
-		font-size: 2rem;
+		font-size: 2em;
 		display: flex;
 		justify-content: center;
 		align-items: center;

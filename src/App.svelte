@@ -1,40 +1,33 @@
 <script lang="ts">
 	import Board from "./Board.svelte";
+	import Face from "./Face.svelte";
 	import { flagged, gameState } from "./stores";
 	import { settings } from "./settings";
 	import { onDestroy } from "svelte";
 	import { GAMESTATE } from "./enums";
 	import type Tile from "./Tile.svelte";
+	import Display from "./Display.svelte";
+	import Timer from "./Timer.svelte";
 
-	settings.bombs = 10;
-	settings.width = 10;
-	settings.height = 10;
+	settings.bombs = 20;
+	settings.width = 15;
+	settings.height = 25;
 
+	let played = 0;
 	let active_tile: Tile = null;
 	let board: Board;
 	let anticipating = false;
-
-	let started: number;
-	let timer: number;
-	let time = "00:00";
-
+	let timer: Timer;
+	let scale = 46 / Math.max(settings.width, settings.height);
+	console.log(scale);
 	const unsub = gameState.subscribe((gs) => {
 		switch (gs) {
 			case GAMESTATE.ACTIVE:
-				started = new Date().getTime();
-				timer = setInterval(() => {
-					const t = new Date().getTime() - started;
-					const hours = Math.floor(t / 3600000);
-					time = hours
-						? `${hours}:`.padStart(3, "0")
-						: "" +
-						  `${Math.floor((t % 3600000) / 60000)}:`.padStart(3, "0") +
-						  `${Math.floor((t % 60000) / 1000)}`.padStart(2, "0");
-				}, 1000);
+				timer.start();
 				break;
 			case GAMESTATE.WON:
 			case GAMESTATE.LOST:
-				clearInterval(timer);
+				timer.stop();
 				break;
 		}
 	});
@@ -61,31 +54,33 @@
 		}
 	}
 
+	function faceClick() {
+		if ($gameState !== GAMESTATE.UNSTARTED) {
+			played += 1;
+			$gameState = GAMESTATE.UNSTARTED;
+			timer.reset();
+			$flagged = 0;
+		}
+	}
+
 	onDestroy(unsub);
 </script>
 
 <svelte:body on:mousedown={mousedown} on:mouseup={mouseup} />
 
-<main>
+<main style="font-size: {scale}vmin">
 	<header>
-		<h2>{settings.bombs - $flagged}</h2>
-		<h2>
-			{#if $gameState === GAMESTATE.WON}
-				😎
-			{:else if $gameState === GAMESTATE.LOST}
-				😖
-			{:else if anticipating}
-				😮
-			{:else}
-				🙂
-			{/if}
-		</h2>
-		<h2>{time}</h2>
+		<Display value={settings.bombs - $flagged} />
+		<Face {anticipating} on:click={faceClick} />
+		<Timer bind:this={timer} />
 	</header>
-	<Board
-		bind:this={board}
-		on:flatten={(e) => (active_tile = board.tiles[e.detail.row][e.detail.col])}
-	/>
+	{#key played}
+		<Board
+			bind:this={board}
+			on:flatten={(e) => (active_tile = board.tiles[e.detail.row][e.detail.col])}
+		/>
+	{/key}
+	<!-- <input type="range" id="scale" bind:value={scale} min="0.5" max="1.5" step="0.1" /> -->
 </main>
 
 <style>
@@ -93,7 +88,11 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	h2 {
-		flex: 1;
+	main {
+		font-size: 1rem;
+		font-size: 3vmin;
+	}
+	input {
+		width: 100%;
 	}
 </style>

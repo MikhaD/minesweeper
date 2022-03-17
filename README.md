@@ -16,6 +16,9 @@ For the past few years I have used a simple minesweeper app on my phone. However
   - Theme
   - Style
   - Bomb generation algorythm
+  - Zoom
+    - Different levels (slider?)
+    - Fit Screen
 
 - Stats
   - Best time for each size
@@ -29,12 +32,10 @@ For the past few years I have used a simple minesweeper app on my phone. However
   - Win %
   - Disarmed mines
 
-- Reset game when emoji clicked
 - Create custom emojis
-- Align components on top of board correctly
-- Create components for the things on top of the board
 - Add manifest.json
 - Add service worker
 
 ## Bugs
 - Active css applied on left click regardless of whether primary action is flag or open
+- When primary action is flag left clicking on numbers no longer does what it is supposed to

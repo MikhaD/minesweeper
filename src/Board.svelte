@@ -36,13 +36,6 @@
 		remaining -= 1;
 		if (remaining === settings.bombs) {
 			$gameState = GAMESTATE.WON;
-			for (const row of tiles) {
-				row.forEach((tile) => {
-					if (tile.bomb && tile.state !== STATE.flag) {
-						tile.state = STATE.flag;
-					}
-				});
-			}
 			flagged.set(settings.bombs);
 		}
 	}

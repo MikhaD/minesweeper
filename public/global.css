@@ -9,6 +9,7 @@
 	font-family: Arial, Helvetica, sans-serif;
 
 	--board-color: #BFBFBF;
+	--border-color: white #7e7e7e #7e7e7e white;
 	--red: #ff0000;
 	user-select: none;
 	height: 100%;
