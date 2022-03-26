@@ -69,7 +69,7 @@
 	function flag() {
 		switch (state) {
 			case STATE.closed:
-				if ($flagged < settings.bombs) {
+				if ($flagged < settings.board.bombs) {
 					state = STATE.flag;
 					$flagged += 1;
 				} else if (settings.question) {
@@ -143,13 +143,13 @@
 	.tile {
 		background: var(--board-color);
 		display: inline-block;
-		width: 1em;
+		width: var(--tile-size);
 		aspect-ratio: 1;
 		overflow: hidden;
-		border: 0.1em solid;
+		border: calc(var(--tile-size) * 0.1) solid;
 		border-color: var(--border-color);
 		font-weight: bold;
-		font-size: 2em;
+		font-size: var(--tile-size);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -157,7 +157,8 @@
 		&.closed:active,
 		&.open,
 		&.flat {
-			border: 0.5px solid #7e7e7e;
+			border: 0.5px solid;
+			border-color: #7e7e7e #7e7e7e transparent transparent;
 		}
 		&.exploded {
 			background: var(--red);

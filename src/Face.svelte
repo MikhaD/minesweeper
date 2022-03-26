@@ -19,7 +19,7 @@
 
 <style>
 	.face {
-		font-size: 2em;
+		font-size: var(--tile-size);
 		cursor: pointer;
 	}
 </style>

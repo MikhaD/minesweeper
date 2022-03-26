@@ -8,17 +8,18 @@ For the past few years I have used a simple minesweeper app on my phone. However
 - Terminating and non terminating settings. Non terminating settings can be changed without having to reset the game
 
 # TO DO
-- Settings menu
-  - board size
-  - number of bombs
-  - question mark
-  - primary action
-  - Theme
-  - Style
-  - Bomb generation algorythm
-  - Zoom
-    - Different levels (slider?)
-    - Fit Screen
+
+- Achievements
+  - Achievement for each mode without using any flags
+  - Time achievements
+  - Finish each type of level
+  - One of each difficulty in a row
+  - Mines disarmed (100, 1000, 10000)
+  - Mines disarmed without flagging them (100, 1000, 10000)
+  - **Hidden:**
+    - Change non game stopping settings 10 times in 1 game (indecisive)
+    - Lose 10 games on the second click (Do you know how to play)
+    - Get all other achievements (try hard)
 
 - Stats
   - Best time for each size
@@ -35,6 +36,8 @@ For the past few years I have used a simple minesweeper app on my phone. However
 - Create custom emojis
 - Add manifest.json
 - Add service worker
+- Check whether the user's device is longer length or height wise and set that dimension to be the longer direction.
+- Use a store for board settings instead of the nonsense I'm using now
 
 ## Bugs
 - Active css applied on left click regardless of whether primary action is flag or open

@@ -7,24 +7,24 @@
 	import Tile from "./Tile.svelte";
 	import { randint } from "./utils";
 
-	export const tiles: Tile[][] = new Array(settings.height).fill(null).map(() => []);
-	let remaining = settings.width * settings.height;
+	export const tiles: Tile[][] = new Array(settings.board.height).fill(null).map(() => []);
+	let remaining = settings.board.width * settings.board.height;
 
 	function generateBombs(row: number, col: number, dontBomb: Tile[]) {
-		const possibleBombs = new Array(settings.width * settings.height)
+		const possibleBombs = new Array(settings.board.width * settings.board.height)
 			.fill(null)
 			.map((_, i) => i);
 		const restricted = new Set<number>();
-		restricted.add(col + row * settings.width);
-		dontBomb.forEach((t: Tile) => restricted.add(t.col + t.row * settings.width));
-		for (let i = 0; i < settings.bombs; ++i) {
+		restricted.add(col + row * settings.board.width);
+		dontBomb.forEach((t: Tile) => restricted.add(t.col + t.row * settings.board.width));
+		for (let i = 0; i < settings.board.bombs; ++i) {
 			let choice = randint(possibleBombs.length);
 			while (restricted.has(possibleBombs[choice])) {
 				possibleBombs.splice(choice, 1);
 				choice = randint(possibleBombs.length);
 			}
 			const bomb = possibleBombs.splice(choice, 1)[0];
-			tiles[Math.floor(bomb / settings.width)][bomb % settings.width].bomb = true;
+			tiles[Math.floor(bomb / settings.board.width)][bomb % settings.board.width].bomb = true;
 		}
 	}
 
@@ -34,9 +34,9 @@
 			generateBombs(e.detail.row, e.detail.col, e.detail.neighbors);
 		}
 		remaining -= 1;
-		if (remaining === settings.bombs) {
+		if (remaining === settings.board.bombs) {
 			$gameState = GAMESTATE.WON;
-			flagged.set(settings.bombs);
+			flagged.set(settings.board.bombs);
 		}
 	}
 
@@ -60,10 +60,11 @@
 <div
 	class="board"
 	class:disabled={$gameState === GAMESTATE.WON || $gameState === GAMESTATE.LOST}
-	style="grid-template: repeat({settings.height}, 1fr) / repeat({settings.width}, 1fr)"
+	style="grid-template: repeat({settings.board.height}, 1fr) / repeat({settings.board
+		.width}, 1fr)"
 >
-	{#each Array(settings.height) as _, i}
-		{#each Array(settings.width) as _, j}
+	{#each Array(settings.board.height) as _, i}
+		{#each Array(settings.board.width) as _, j}
 			<Tile bind:this={tiles[i][j]} row={i} col={j} on:clicked={clicked} on:flatten />
 		{/each}
 	{/each}

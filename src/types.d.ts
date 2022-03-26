@@ -1,7 +1,11 @@
 type Settings = {
-	width: int,
-	height: int,
+	board: BoardSettings,
 	question: boolean,
-	bombs: number;
 	primary_action: ACTION;
+};
+
+type BoardSettings = {
+	width: number,
+	height: number,
+	bombs: number,
 };

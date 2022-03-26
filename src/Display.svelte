@@ -6,11 +6,11 @@
 
 <style>
 	.display {
-		font-size: 1.8em;
+		font-size: var(--tile-size);
 		font-weight: bold;
 		border: 0.2em solid;
 		border-color: var(--border-color);
-		min-width: 4em;
+		min-width: calc(4 * var(--tile-size));
 		display: grid;
 		place-items: center;
 		color: var(--red);
