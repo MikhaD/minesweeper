@@ -27,11 +27,8 @@
 		public check(element: RadioObj) {
 			this.value = element.value;
 			for (const el of this.elements) {
-				// Checking first because setting it may cause extra updates even if it doesn't change
-				console.log(el.isChecked());
-				if (el.isChecked() && el !== element) {
-					el.uncheck();
-				}
+				// Checking first ∵ setting it may cause extra updates even if it doesn't change
+				if (el.isChecked() && el !== element) el.uncheck();
 			}
 		}
 	}
@@ -48,8 +45,8 @@
 
 	const self: RadioObj = {
 		value,
-		uncheck: () => (checked = false),
 		isChecked: () => checked,
+		uncheck: () => (checked = false),
 	};
 
 	$: if (checked && name) groups.get(name).check(self);
@@ -72,48 +69,39 @@
 </script>
 
 <div class="radio" on:click={() => (checked = true)} {checked}>
-	<span class="button" />
-	<span class="label">
-		<slot />
-	</span>
+	<slot />
 </div>
 
 <style lang="scss">
 	.radio {
+		padding-left: 1.25em;
 		cursor: pointer;
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
-	}
-	.button {
-		display: inline-block;
-		height: 1em;
-		aspect-ratio: 1;
-		border-radius: 50%;
 		position: relative;
-		&::before {
+		&::after {
 			visibility: hidden;
 		}
 		&::before,
 		&::after {
 			content: "";
-			width: 100%;
-			height: 100%;
-			border-radius: 50%;
 			position: absolute;
-			border: solid 0.2rem;
+			left: 0;
+			width: 1em;
+			aspect-ratio: 1;
+			border-radius: 50%;
+			border: solid 0.15em var(--fg-primary);
 			transition: all 0.2s ease-in-out;
 		}
-	}
-	.radio[checked="true"] {
-		.button::after {
-			border-color: teal;
-			transform: scale(0.5);
-			background-color: teal;
-		}
-		.button::before {
-			visibility: visible;
-			border-color: teal;
+		&[checked="true"] {
+			&::before {
+				width: 0.5em;
+				margin: 0.25em;
+				border-color: var(--primary);
+				background-color: var(--primary);
+			}
+			&::after {
+				visibility: visible;
+				border-color: var(--primary);
+			}
 		}
 	}
 </style>

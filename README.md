@@ -20,6 +20,7 @@ For the past few years I have used a simple minesweeper app on my phone. However
     - Change non game stopping settings 10 times in 1 game (indecisive)
     - Lose 10 games on the second click (Do you know how to play)
     - Get all other achievements (try hard)
+    - +versions of time achievements (easy in under 10s)
 
 - Stats
   - Best time for each size
@@ -42,3 +43,4 @@ For the past few years I have used a simple minesweeper app on my phone. However
 ## Bugs
 - Active css applied on left click regardless of whether primary action is flag or open
 - When primary action is flag left clicking on numbers no longer does what it is supposed to
+- Some sizes still overflow. Resize window on easy to reproduce
