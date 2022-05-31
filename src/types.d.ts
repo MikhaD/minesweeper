@@ -1,4 +1,5 @@
 type Settings = {
+	difficulty: DIFFICULTY,
 	board: BoardSettings,
 	question: boolean,
 	primary_action: ACTION;

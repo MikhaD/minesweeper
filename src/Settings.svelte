@@ -4,10 +4,10 @@
 	import { fade } from "svelte/transition";
 	import Radio, { groups } from "./Radio.svelte";
 	import Range from "./Range.svelte";
-	import { applyDifficulty, difficulties, DIFFICULTY } from "./settings";
+	import { applyDifficulty, DIFFICULTY, settings } from "./settings";
 	export let visible = false;
 	const dispatch = createEventDispatcher();
-	let { bombs, width, height } = difficulties[DIFFICULTY.hard];
+	let { bombs, width, height } = settings.board;
 
 	// 	- Settings menu
 	//   - board size
@@ -94,9 +94,6 @@
 	:global(.visible div[checked="true"] + .custom) {
 		pointer-events: initial;
 		opacity: 1;
-	}
-	input[type="range"] {
-		width: 100%;
 	}
 	.visible {
 		opacity: 1;

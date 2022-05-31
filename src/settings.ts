@@ -1,6 +1,6 @@
 import { ACTION } from "./enums";
 
-export const enum DIFFICULTY {
+export enum DIFFICULTY {
 	easy,
 	normal,
 	hard,
@@ -31,6 +31,7 @@ export const difficulties: Difficulty[] = [
 ];
 
 export const settings: Settings = {
+	difficulty: DIFFICULTY.normal,
 	board: difficulties[DIFFICULTY.normal],
 	question: false,
 	primary_action: ACTION.OPEN

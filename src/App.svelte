@@ -2,12 +2,12 @@
 	import Board from "./Board.svelte";
 	import Face from "./Face.svelte";
 	import { flagged, gameState } from "./stores";
-	import { settings } from "./settings";
+	import { DIFFICULTY, settings } from "./settings";
 	import { onDestroy, onMount } from "svelte";
 	import { GAMESTATE } from "./enums";
 	import type Tile from "./Tile.svelte";
 	import Display from "./Display.svelte";
-	import Timer from "./Timer.svelte";
+	import Timer, { formatTime } from "./Timer.svelte";
 	import Settings from "./Settings.svelte";
 
 	let played = 0;
@@ -28,12 +28,27 @@
 	}
 	if (main) main.style.setProperty("--tile-size", scale);
 
+	function recordTime(time: number) {
+		if (settings.difficulty === DIFFICULTY.custom) return;
+		// "W10=" is "[]" in base64
+		const scores = JSON.parse(atob(localStorage.getItem("high-scores") || "W10="));
+		const previous = +scores[settings.difficulty];
+		if (isNaN(previous) || previous > time) {
+			console.log(
+				`new best time for ${DIFFICULTY[settings.difficulty]} mode: ${formatTime(time)}`
+			);
+			scores[settings.difficulty] = time;
+			localStorage.setItem("high-scores", btoa(JSON.stringify(scores)));
+		}
+	}
+
 	const unsub = gameState.subscribe((gs) => {
 		switch (gs) {
 			case GAMESTATE.ACTIVE:
 				timer.start();
 				break;
 			case GAMESTATE.WON:
+				recordTime(timer.time);
 			case GAMESTATE.LOST:
 				timer.stop();
 				break;
