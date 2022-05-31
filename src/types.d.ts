@@ -9,3 +9,9 @@ type BoardSettings = {
 	height: number,
 	bombs: number,
 };
+
+type Difficulty = {
+	width: number,
+	height: number,
+	bombs: number;
+};

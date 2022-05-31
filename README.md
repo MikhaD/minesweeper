@@ -39,6 +39,8 @@ For the past few years I have used a simple minesweeper app on my phone. However
 - Add service worker
 - Check whether the user's device is longer length or height wise and set that dimension to be the longer direction.
 - Use a store for board settings instead of the nonsense I'm using now
+- Add some slight animations to ease lag for times opening and closing
+- Should be using canvas to render the board, using svelte and the dom is slooooow
 
 ## Bugs
 - Active css applied on left click regardless of whether primary action is flag or open

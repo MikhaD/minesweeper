@@ -1,14 +1,13 @@
 import { ACTION } from "./enums";
 
-const enum DIFFICULTY {
+export const enum DIFFICULTY {
 	easy,
 	normal,
 	hard,
 	expert,
 	custom,
 }
-
-const difficulties = [
+export const difficulties: Difficulty[] = [
 	{
 		width: 11,
 		height: 8,

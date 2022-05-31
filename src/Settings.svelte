@@ -3,9 +3,12 @@
 
 	import { fade } from "svelte/transition";
 	import Radio, { groups } from "./Radio.svelte";
-	import { applyDifficulty } from "./settings";
+	import Range from "./Range.svelte";
+	import { applyDifficulty, difficulties, DIFFICULTY } from "./settings";
 	export let visible = false;
 	const dispatch = createEventDispatcher();
+	let { bombs, width, height } = difficulties[DIFFICULTY.hard];
+
 	// 	- Settings menu
 	//   - board size
 	//   - number of bombs
@@ -18,7 +21,12 @@
 	//     - Different levels (slider?)
 	//     - Fit Screen
 	function close() {
-		applyDifficulty(Number(groups.get("difficulty").value));
+		const difficulty = +groups.get("difficulty").value;
+		if (difficulty === DIFFICULTY.custom) {
+			applyDifficulty(DIFFICULTY.custom, { bombs, width, height });
+		} else {
+			applyDifficulty(difficulty);
+		}
 		dispatch("close");
 		visible = false;
 	}
@@ -33,16 +41,17 @@
 		<h2>Difficulty</h2>
 		<Radio value="0" name="difficulty">Easy</Radio>
 		<Radio value="1" name="difficulty">Normal</Radio>
-		<Radio value="2" name="difficulty">Hard</Radio>
+		<Radio value="2" name="difficulty" checked={true}>Hard</Radio>
 		<Radio value="3" name="difficulty">Expert</Radio>
-		<Radio value="4" name="difficulty">Custom</Radio>
+		<Radio value="4" name="difficulty" checked={true}>Custom</Radio>
 		<div class="custom">
-			<h4>Width</h4>
-			<input type="range" id="width" step="1" />
-			<h4>Height</h4>
-			<input type="range" id="height" step="1" />
-			<h4>Bombs</h4>
-			<input type="range" id="bombs" step="1" />
+			<h4>Width ({width})</h4>
+			<!-- <input type="range" id="width" step="1" bind:value={width} /> -->
+			<Range min={3} max={50} bind:value={width} />
+			<h4>Height ({height})</h4>
+			<Range min={5} max={50} bind:value={height} />
+			<h4>Bombs ({bombs})</h4>
+			<Range min={1} max={width * height - 9} bind:value={bombs} />
 		</div>
 	</section>
 </div>
@@ -82,7 +91,7 @@
 		opacity: 0;
 		transition: opacity 0.2s ease;
 	}
-	:global(div[checked="true"] + .custom) {
+	:global(.visible div[checked="true"] + .custom) {
 		pointer-events: initial;
 		opacity: 1;
 	}

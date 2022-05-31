@@ -48,8 +48,9 @@
 		isChecked: () => checked,
 		uncheck: () => (checked = false),
 	};
+	let loaded = false;
 
-	$: if (checked && name) groups.get(name).check(self);
+	$: if (checked && loaded) groups.get(name).check(self);
 
 	onMount(() => {
 		if (name) {
@@ -58,6 +59,7 @@
 			}
 			groups.get(name).add(self);
 		}
+		loaded = true;
 	});
 	onDestroy(() => {
 		if (name) {
